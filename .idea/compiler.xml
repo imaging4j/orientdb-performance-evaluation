@@ -26,5 +26,8 @@
         <module name="orientdb-performance-evaluation" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="orientdb-performance-evaluation" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
