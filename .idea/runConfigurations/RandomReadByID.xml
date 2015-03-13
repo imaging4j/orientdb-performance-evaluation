@@ -7,7 +7,7 @@
       </pattern>
     </extension>
     <option name="MAIN_CLASS_NAME" value="com.siams.orientdb.evaluation.RandomReadByID" />
-    <option name="VM_PARAMETERS" value="-Dstorage.wal.path=wal -Dstorage.useWAL=false" />
+    <option name="VM_PARAMETERS" value="-Xmx800m -Dstorage.diskCache.bufferSize=3000 -Dstorage.wal.path=wal -Dstorage.useWAL=false" />
     <option name="PROGRAM_PARAMETERS" value="test-db --mode=pPVI" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />

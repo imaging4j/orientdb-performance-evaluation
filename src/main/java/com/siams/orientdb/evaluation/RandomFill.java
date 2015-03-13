@@ -1,7 +1,9 @@
 package com.siams.orientdb.evaluation;
 
+import com.orientechnologies.orient.core.Orient;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
+import com.orientechnologies.orient.core.iterator.ORecordIteratorClass;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.record.impl.ORecordBytes;
 
@@ -19,17 +21,22 @@ public class RandomFill {
     private final byte[] imageData = new byte[256 * 256];
     private int recordCount;
     private int nextTileId;
+    private long t0;
 
-    private RandomFill() {
+    private RandomFill(ODatabaseDocumentTx db) {
         random.nextBytes(imageData);
+        nextTileId = DbTools.getMaxTileId(db) + 1;
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length > 1 && args[1].equals("--create")) CreateDB.main(args);
+        final String url = DbTools.getLocalDbPath(args);
+        if (!Orient.instance().loadStorage(url).exists()) {
+            CreateDB.main(args);
+        }
 
-        final RandomFill action = new RandomFill();
-        try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(DbTools.getLocalDbPath(args))
+        try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(url)
                 .open("admin", "admin")) {
+            final RandomFill action = new RandomFill(db);
 
             db.declareIntent(new OIntentMassiveInsert());
 
@@ -38,21 +45,38 @@ public class RandomFill {
 
             System.out.println("executing...");
             action.recordCount = 0;
-            final long t0 = System.currentTimeMillis();
-            action.execute(db, 32768, 100);
-            final long t1 = System.currentTimeMillis();
-            final long time = t1 - t0;
-            System.out.printf("done: %dms / %d = %s ms/record%n",
-                    time, action.recordCount,
-                    ((double) time) / action.recordCount
-            );
+            action.t0 = System.currentTimeMillis();
+            action.execute(db, 65536, 100);
+            action.printTime();
             action.saveConfiguration(db);
+
+            db.declareIntent(null);
+            db.close();
+
+            System.out.println("shutdown...");
+            Orient.instance().shutdown();
+            action.printTime();
         }
     }
 
+    private void printTime() {
+        final long t1 = System.currentTimeMillis();
+        final long time = t1 - t0;
+        System.out.printf("done: %dms / %d = %s ms/record%n",
+                time, recordCount,
+                ((double) time) / recordCount
+        );
+    }
+
     private void saveConfiguration(ODatabaseDocumentTx db) {
-        db.newInstance("Configuration")
-                .field("maxTileId", nextTileId)
+        final ORecordIteratorClass<ODocument> configurations = db.browseClass("Configuration");
+        final ODocument configuration;
+        if (configurations.hasNext()) {
+            configuration = configurations.next();
+        } else {
+            configuration = db.newInstance("Configuration");
+        }
+        configuration
                 .field("imageSize", imageData.length)
                 .save();
     }

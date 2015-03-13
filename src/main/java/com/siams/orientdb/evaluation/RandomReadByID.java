@@ -49,9 +49,8 @@ public class RandomReadByID {
         System.out.println("readParticleValues: " + readParticleValues);
 
         final ODatabaseDocument db = ODatabaseRecordThreadLocal.INSTANCE.get();
-        final ODocument configuration = db.browseClass("Configuration").next();
-        maxId = configuration.field("maxTileId", OType.INTEGER);
-        imageSize = configuration.field("imageSize", OType.INTEGER);
+        maxId = DbTools.getMaxTileId(db);
+        imageSize = db.browseClass("Configuration").next().field("imageSize", OType.INTEGER);
         System.out.println("# tile maxId: " + maxId);
         System.out.println("# tile imageSize: " + imageSize);
     }
