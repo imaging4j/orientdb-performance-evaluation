@@ -39,7 +39,7 @@ public class RandomFill {
             System.out.println("executing...");
             action.recordCount = 0;
             final long t0 = System.currentTimeMillis();
-            action.execute(db, 2048, 100);
+            action.execute(db, 32768, 100);
             final long t1 = System.currentTimeMillis();
             final long time = t1 - t0;
             System.out.printf("done: %dms / %d = %s ms/record%n",

@@ -1,14 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="RandomReadByID" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="RandomFill" type="Application" factoryName="Application" nameIsGenerated="true">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
       <pattern>
         <option name="PATTERN" value="com.siams.orientdb.evaluation.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
-    <option name="MAIN_CLASS_NAME" value="com.siams.orientdb.evaluation.RandomReadByID" />
+    <option name="MAIN_CLASS_NAME" value="com.siams.orientdb.evaluation.RandomFill" />
     <option name="VM_PARAMETERS" value="-Dstorage.wal.path=wal -Dstorage.useWAL=false" />
-    <option name="PROGRAM_PARAMETERS" value="test-db --mode=pPVI" />
+    <option name="PROGRAM_PARAMETERS" value="test-db --create" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
