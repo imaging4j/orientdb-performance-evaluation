@@ -57,9 +57,15 @@ public class RandomReadByID {
 
     public static void main(String[] args) throws IOException {
 
+        final String url = DbTools.getLocalDbPath(args);
+        if (!Orient.instance().loadStorage(url).exists()) {
+            RandomFill.main(args);
+            Orient.instance().startup();
+        }
+
         Orient.instance().registerThreadDatabaseFactory(new ODatabaseThreadLocalFactory() {
             final OPartitionedDatabasePool pool = new OPartitionedDatabasePool(
-                    DbTools.getLocalDbPath(args), "admin", "admin");
+                    url, "admin", "admin");
 
             @Override
             public ODatabaseDocumentInternal getThreadDatabase() {
