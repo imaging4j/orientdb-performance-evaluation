@@ -1,7 +1,6 @@
 package com.siams.orientdb.evaluation;
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocument;
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 
@@ -18,7 +17,9 @@ public class DbTools {
 
     static String getLocalDbPath(String name) {
         try {
-            final Path dbPath = Paths.get(".").toRealPath().resolve("test-db-root").resolve(name);
+            final Path dbPath = Paths.get("..").toRealPath()
+                    .resolve("orientdb-performance-evaluation-test-db")
+                    .resolve(name);
             return "plocal:" + dbPath.toUri().getPath();
         } catch (IOException e) {
             throw new IOError(e);
