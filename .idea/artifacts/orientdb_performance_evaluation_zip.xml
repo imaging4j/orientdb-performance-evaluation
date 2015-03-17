@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="orientdb-performance-evaluation:zip">
+    <output-path>$PROJECT_DIR$/out/artifacts/orientdb_performance_evaluation_zip</output-path>
+    <root id="archive" name="orientdb-performance-evaluation.zip">
+      <element id="artifact" artifact-name="orientdb-performance-evaluation:dir" />
+    </root>
+  </artifact>
+</component>
