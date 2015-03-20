@@ -13,9 +13,9 @@ import java.util.List;
 /**
  * Created by alexei.vylegzhanin@gmail.com on 3/12/2015.
  */
-public class DbTools {
+class LocalDB {
 
-    static String getLocalDbPath(String name) {
+    static String toURI(String name) {
         try {
             final Path dbPath = Paths.get("..").toRealPath()
                     .resolve("orientdb-performance-evaluation-test-db")
@@ -26,8 +26,8 @@ public class DbTools {
         }
     }
 
-    static String getLocalDbPath(String[] args) {
-        return getLocalDbPath(args.length > 0 ? args[0] : "test-db");
+    static String toURI(String[] args) {
+        return toURI(args.length > 0 ? args[0] : "test-db");
     }
 
     static int getMaxTileId(ODatabaseDocument db) {

@@ -4,7 +4,6 @@ import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchemaProxy;
 import com.orientechnologies.orient.core.metadata.schema.OType;
-import com.orientechnologies.orient.core.record.impl.ORecordBytes;
 
 import java.io.IOException;
 
@@ -13,7 +12,7 @@ import java.io.IOException;
  */
 public class CreateDB {
     public static void main(String[] args) throws IOException {
-        try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(DbTools.getLocalDbPath(args)).create()) {
+        try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(LocalDB.toURI(args)).create()) {
             System.out.println("created: " + db.getURL());
 
             final OSchemaProxy schema = db.getMetadata().getSchema();

@@ -49,7 +49,7 @@ public class RandomReadByID {
         System.out.println("readParticleValues: " + readParticleValues);
 
         final ODatabaseDocument db = ODatabaseRecordThreadLocal.INSTANCE.get();
-        maxId = DbTools.getMaxTileId(db);
+        maxId = LocalDB.getMaxTileId(db);
         imageSize = db.browseClass("Configuration").next().field("imageSize", OType.INTEGER);
         System.out.println("# tile maxId: " + maxId);
         System.out.println("# tile imageSize: " + imageSize);
@@ -57,7 +57,7 @@ public class RandomReadByID {
 
     public static void main(String[] args) throws IOException {
 
-        final String url = DbTools.getLocalDbPath(args);
+        final String url = LocalDB.toURI(args);
         if (!Orient.instance().loadStorage(url).exists()) {
             RandomFill.main(args);
             Orient.instance().startup();

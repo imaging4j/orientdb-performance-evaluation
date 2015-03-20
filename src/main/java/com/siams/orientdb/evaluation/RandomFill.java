@@ -25,11 +25,11 @@ public class RandomFill {
 
     private RandomFill(ODatabaseDocumentTx db) {
         random.nextBytes(imageData);
-        nextTileId = DbTools.getMaxTileId(db) + 1;
+        nextTileId = LocalDB.getMaxTileId(db) + 1;
     }
 
     public static void main(String[] args) throws IOException {
-        final String url = DbTools.getLocalDbPath(args);
+        final String url = LocalDB.toURI(args);
         if (!Orient.instance().loadStorage(url).exists()) {
             CreateDB.main(args);
         }
