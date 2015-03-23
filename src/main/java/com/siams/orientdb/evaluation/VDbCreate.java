@@ -26,6 +26,8 @@ public class VDbCreate {
             vgPolygon.createProperty("pathBytes", OType.LINK);
             vgPolygon.createProperty("pathCount", OType.INTEGER);
             vgPolygon.createProperty("pathSize", OType.INTEGER);
+
+            vgPolygon.createIndex("VGPolygon.id", OClass.INDEX_TYPE.UNIQUE, "id");
         }
         System.out.println("done");
     }

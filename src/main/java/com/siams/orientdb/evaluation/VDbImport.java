@@ -26,6 +26,7 @@ public class VDbImport {
     private final ByteBuffer buffer;
     private int recordCount;
     private int baseId;
+    private int maxId;
     private long t0;
 
     public VDbImport(String fileName) throws IOException {
@@ -54,8 +55,7 @@ public class VDbImport {
             VDbCreate.main(args);
         }
 
-        try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(url)
-                .open("admin", "admin")) {
+        try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).open("admin", "admin")) {
             final VDbImport action = new VDbImport(fileName);
 
             db.declareIntent(new OIntentMassiveInsert());
@@ -70,8 +70,6 @@ public class VDbImport {
             }
 
             db.declareIntent(null);
-            db.close();
-
             System.out.println("shutting down...");
         }
     }
@@ -86,6 +84,8 @@ public class VDbImport {
     }
 
     private void execute(ODatabaseDocumentTx db) throws IOException {
+        maxId = baseId;
+
         buffer.position(0);
         buffer.limit(buffer.capacity());
         while (buffer.remaining() > 20) {
@@ -118,11 +118,16 @@ public class VDbImport {
 
             buffer.limit(buffer.capacity());
         }
+
+        baseId = maxId + 1;
     }
 
     private void addPolygon(ODatabaseDocumentTx db, int id, byte[] pathBytes, int pathCount) {
+        id += baseId;
+        maxId = Math.max(id, maxId);
+
         final ODocument vgPolygon = db.newInstance("VGPolygon");
-        vgPolygon.field("id", baseId + id);
+        vgPolygon.field("id", id);
         vgPolygon.field("pathBytes", new ORecordBytes(pathBytes));
         vgPolygon.field("pathCount", pathCount);
         vgPolygon.field("pathSize", pathBytes.length);
