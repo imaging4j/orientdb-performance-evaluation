@@ -13,7 +13,7 @@ import java.io.IOException;
  * Created by alexei.vylegzhanin@gmail.com on 3/23/2015.
  */
 public class VDbCreate {
-    public static void main(String[] args) throws IOException {
+    public static void main(String... args) throws IOException {
         try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(LocalDB.toURI("vector-db")).create()) {
             System.out.println("created: " + db.getURL());
 
@@ -27,7 +27,12 @@ public class VDbCreate {
             vgPolygon.createProperty("pathCount", OType.INTEGER);
             vgPolygon.createProperty("pathSize", OType.INTEGER);
 
-            vgPolygon.createIndex("VGPolygon.id", OClass.INDEX_TYPE.UNIQUE, "id");
+            final boolean indexLess = args.length > 0 && args[0].equals("index-less");
+            if (indexLess) {
+                System.out.println("index-less");
+            } else {
+                vGeometry.createIndex("VGeometry.id", OClass.INDEX_TYPE.UNIQUE, "id");
+            }
         }
         System.out.println("done");
     }

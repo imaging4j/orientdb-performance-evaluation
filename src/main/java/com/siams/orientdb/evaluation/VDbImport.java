@@ -3,6 +3,9 @@ package com.siams.orientdb.evaluation;
 import com.orientechnologies.orient.core.Orient;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
+import com.orientechnologies.orient.core.metadata.schema.OClass;
+import com.orientechnologies.orient.core.metadata.schema.OSchemaProxy;
+import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.record.impl.ORecordBytes;
 
@@ -46,13 +49,14 @@ public class VDbImport {
         final String fileName = args[0];
         final int repeatCount = args.length > 1 ? Integer.parseInt(args[1]) : 10;
 
-        System.err.println("fileName: " + fileName);
-        System.err.println("repeatCount: " + repeatCount);
+        System.out.println("fileName: " + fileName);
+        System.out.println("repeatCount: " + repeatCount);
 
 
         final String url = LocalDB.toURI("vector-db");
-        if (!Orient.instance().loadStorage(url).exists()) {
-            VDbCreate.main(args);
+        final boolean newDB = !Orient.instance().loadStorage(url).exists();
+        if (newDB) {
+            VDbCreate.main("index-less");
         }
 
         try (final ODatabaseDocumentTx db = new ODatabaseDocumentTx(url).open("admin", "admin")) {
@@ -70,6 +74,12 @@ public class VDbImport {
             }
 
             db.declareIntent(null);
+
+            if (newDB) {
+                System.out.println("creating index...");
+                final OClass vGeometry = db.getMetadata().getSchema().getClass("VGeometry");
+                vGeometry.createIndex("VGeometry.id", OClass.INDEX_TYPE.UNIQUE, "id");
+            }
             System.out.println("shutting down...");
         }
     }
