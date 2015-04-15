@@ -41,4 +41,15 @@ public class CellIndex {
     public static int indexLabel(long index) {
         return (int) (index & 0xffff);
     }
+
+    public static int toZ(int cellDim, double maxDim) {
+        int result = 0;
+        while (cellDim < maxDim) {
+            cellDim = cellDim * 2;
+            result++;
+            assert result < 16;
+        }
+        return result;
+    }
+
 }

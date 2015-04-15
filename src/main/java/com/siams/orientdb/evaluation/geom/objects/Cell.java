@@ -2,6 +2,7 @@ package com.siams.orientdb.evaluation.geom.objects;
 
 import javafx.geometry.Bounds;
 
+import javax.persistence.Embedded;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
