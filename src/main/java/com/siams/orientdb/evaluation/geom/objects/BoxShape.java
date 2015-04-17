@@ -16,6 +16,10 @@ public class BoxShape extends Shape {
     private double width;
     private double height;
 
+    public BoxShape() {
+
+    }
+
     public BoxShape(double minX, double minY, double width, double height) {
         this.minX = minX;
         this.minY = minY;
